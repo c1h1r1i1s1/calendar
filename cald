@@ -1,0 +1,31 @@
+#!/sbin/openrc-run
+location='/home/cfane/calendar/src'
+depend() {
+    need net
+    use dns logger netmount
+}
+
+name="Cald Daemon"
+description="Calender Daemon Initialisation Service"
+
+start() {
+    ebegin "Starting cald daemon"
+    start-stop-daemon --background --start --exec /usr/bin/python3 "$location"/daemon.py \
+    --make-pidfile --pidfile "$location"/cald_daemon.pid
+    eend $?
+}
+
+stop() {
+    ebegin "Stopping cald daemon"
+    start-stop-daemon --stop --signal INT --exec /usr/bin/python3 "$location"/daemon.py \
+    --pidfile "$location"/cald_daemon.pid
+    eend $?
+}
+restart() {
+    ebegin "Restarting cald daemon"
+    start-stop-daemon --stop --signal INT --exec /usr/bin/python3 "$location"/daemon.py \
+    --pidfile "$location"/cald_daemon.pid
+    start-stop-daemon --background --start --exec /usr/bin/python3 "$location"/daemon.py \
+    --make-pidfile --pidfile "$location"/cald_daemon.pid
+    eend $?
+}
