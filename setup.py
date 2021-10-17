@@ -5,14 +5,14 @@ action = sys.argv[1]
 if action == "build":
     print("Building source files:")
     print("Ensuring init file knows where to find daemon...")
-    cald = open("src/cald", 'r')
+    cald = open("{}/cald".format(sys.argv[2]), 'r')
     lines = []
     for line in cald:
             lines.append(line)
     cald.close()
     lines[1] = "location='{}'\n".format(os.getcwd())
     print(lines[1])
-    cald = open("src/cald", "w")
+    cald = open("{}/cald".format(sys.argv[2]), "w")
     for line in lines:
         cald.write(line)
     cald.close()
